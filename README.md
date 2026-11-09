@@ -10,6 +10,11 @@ instead of lorem ipsum. One file each, no dependencies, and they use your theme'
 | `hero-plain` | Left-aligned hero with a label, a specific headline, two buttons and three short proof points. |
 | `hero-split` | Headline and one button on the left, a small product picture on the right drawn with plain elements. |
 | `hero-signup` | Centred headline with one highlighted phrase and an accessible email form. |
+| `burst-depth` | Hero over a calm 3D burst of light that turns towards the pointer. Theme colors, tap to pulse. |
+| `burst-drift` | Hero over a 3D burst that drifts on its own; rays bend away from the pointer. |
+| `burst-flare` | Hero over a burst turned inside out: dots near the centre, tails streaking outwards. |
+| `burst-part` | Hero over light streaks that step aside and stretch as the pointer passes. |
+| `burst-fan` | Hero over a flat fan of light with a few dashed, moving rays. |
 
 ## Install
 
