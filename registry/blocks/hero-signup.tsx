@@ -16,7 +16,7 @@ const copy = {
 /**
  * Hero: Signup · Steal My Slop Blocks · https://blocks.stealmyslop.com
  * MIT License. Copyright (c) 2026 99 Bays LLC. Free to use, change and share; keep this
- * notice with the code. Full text: https://stealmyslop.com/license#blocks
+ * notice with the code. Full text: https://blocks.stealmyslop.com/license
  * SPDX-License-Identifier: MIT
  *
  * Centred headline with one highlighted phrase and an email form. The form doesn't send
