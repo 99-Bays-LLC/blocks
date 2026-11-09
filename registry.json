@@ -29,6 +29,51 @@
       "description": "Centred headline with one highlighted phrase and an accessible email form, ready to connect to your email tool.",
       "categories": ["hero"],
       "files": [{ "path": "registry/blocks/hero-signup.tsx", "type": "registry:component" }]
+    },
+    {
+      "name": "burst-depth",
+      "type": "registry:block",
+      "meta": { "license": "MIT" },
+      "title": "Burst: Depth",
+      "description": "A burst of light rising from the bottom edge, in 3D. The whole burst turns gently towards the pointer. Written copy, theme colors, one file.",
+      "categories": ["effect"],
+      "files": [{ "path": "registry/blocks/burst-depth.tsx", "type": "registry:component" }]
+    },
+    {
+      "name": "burst-drift",
+      "type": "registry:block",
+      "meta": { "license": "MIT" },
+      "title": "Burst: Drift",
+      "description": "A 3D burst of light that drifts on its own; rays bend away from the pointer. Written copy, theme colors, one file.",
+      "categories": ["effect"],
+      "files": [{ "path": "registry/blocks/burst-drift.tsx", "type": "registry:component" }]
+    },
+    {
+      "name": "burst-flare",
+      "type": "registry:block",
+      "meta": { "license": "MIT" },
+      "title": "Burst: Flare",
+      "description": "A 3D burst turned inside out: bright dots near the centre, tails streaking outwards. Written copy, theme colors, one file.",
+      "categories": ["effect"],
+      "files": [{ "path": "registry/blocks/burst-flare.tsx", "type": "registry:component" }]
+    },
+    {
+      "name": "burst-part",
+      "type": "registry:block",
+      "meta": { "license": "MIT" },
+      "title": "Burst: Part",
+      "description": "Light streaks that step aside and stretch as the pointer passes, like parting a curtain of light. Written copy, theme colors, one file.",
+      "categories": ["effect"],
+      "files": [{ "path": "registry/blocks/burst-part.tsx", "type": "registry:component" }]
+    },
+    {
+      "name": "burst-fan",
+      "type": "registry:block",
+      "meta": { "license": "MIT" },
+      "title": "Burst: Fan",
+      "description": "A flat fan of light rays, some dashed and moving, that curve away from the pointer. Written copy, theme colors, one file.",
+      "categories": ["effect"],
+      "files": [{ "path": "registry/blocks/burst-fan.tsx", "type": "registry:component" }]
     }
   ]
 }
