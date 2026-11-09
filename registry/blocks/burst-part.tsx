@@ -30,6 +30,7 @@ const copy = {
  * The light uses your theme: rays take `primary`, the stage takes `background`, and both update
  * when you switch to dark mode. Hover bends the rays; a click or tap sends a pulse through them.
  * Pauses with the button, when off screen, and in a hidden tab. With reduced motion it stays still.
+ * Phones get a light mode, and any device that can't keep up steps down, then settles on a still.
  * Edit the words in `copy` above; tune the light in `LIGHT` below.
  */
 const LIGHT = {
@@ -81,6 +82,13 @@ export function BurstPart() {
     let hidden = document.hidden;
     let offscreen = true;
     let w = 1, h = 1, time = 0, last = 0, frame = 0, count = rays.length;
+    // Phones get the light mode from the start: 1x pixels, a third of the rays, 30 frames a second,
+    // no per-ray gradients. Any device steps down a tier if frames get slow, and stops at a still
+    // picture if even the light mode is too much. Keeps phones cool; desktops keep the full show.
+    const coarse = matchMedia("(pointer: coarse)").matches;
+    let tier = coarse ? 1 : 0; // 0 full, 1 light, 2 still
+    const budget = 1000 / (coarse ? 30 : 60);
+    let lastDraw = 0, cost = 0, gap = 0, slowSince = 0;
     const pointer = { x: 0, y: 0, tx: 0, ty: 0, strength: 0, target: 0 };
     const pulses: { x: number; y: number; age: number }[] = [];
 
@@ -100,6 +108,7 @@ export function BurstPart() {
     const sprite = document.createElement("canvas");
     sprite.width = sprite.height = 48;
     const readColors = () => {
+      glowCache = null;
       const bg = rgbOf(getComputedStyle(section).backgroundColor);
       dark = 0.2126 * bg[0] + 0.7152 * bg[1] + 0.0722 * bg[2] < 140;
       line = rgbOf(getComputedStyle(canvas).color);
@@ -133,25 +142,95 @@ export function BurstPart() {
       return { x: x + px, y: y + py };
     };
 
+    // The glow under the burst only changes on resize or a theme change, so it's drawn once and reused.
+    let glowCache: HTMLCanvasElement | null = null;
     const glow = (ox: number, oy: number) => {
-      const a = dark ? 1 : 0.55;
-      const g = ctx.createRadialGradient(ox, oy, 0, ox, oy, Math.min(w * 0.58, h * 0.95));
-      g.addColorStop(0, rgba(tip, 0.6 * a));
-      g.addColorStop(0.12, rgba(line, 0.3 * a));
-      g.addColorStop(0.4, rgba(line, 0.1 * a));
-      g.addColorStop(1, rgba(line, 0));
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, w, h);
+      if (!glowCache) {
+        glowCache = document.createElement("canvas");
+        glowCache.width = Math.ceil(w / 2);
+        glowCache.height = Math.ceil(h / 2);
+        const gc = glowCache.getContext("2d");
+        if (gc) {
+          const a = dark ? 1 : 0.55;
+          gc.scale(0.5, 0.5);
+          const g = gc.createRadialGradient(ox, oy, 0, ox, oy, Math.min(w * 0.58, h * 0.95));
+          g.addColorStop(0, rgba(tip, 0.6 * a));
+          g.addColorStop(0.12, rgba(line, 0.3 * a));
+          g.addColorStop(0.4, rgba(line, 0.1 * a));
+          g.addColorStop(1, rgba(line, 0));
+          gc.fillStyle = g;
+          gc.fillRect(0, 0, w, h);
+        }
+      }
+      ctx.drawImage(glowCache, 0, 0, w, h);
+    };
+
+    // Light mode batches every ray into four brightness groups: 8 strokes and 4 fills a frame
+    // instead of hundreds of gradients. Full mode gives each ray its own fading gradient and glow.
+    const LEVELS = 4;
+    let faint: Path2D[] = [], bright: Path2D[] = [], dots: Path2D[] = [];
+    const begin = () => {
+      faint = Array.from({ length: LEVELS }, () => new Path2D());
+      bright = Array.from({ length: LEVELS }, () => new Path2D());
+      dots = Array.from({ length: LEVELS }, () => new Path2D());
+    };
+    const level = (alpha: number) => Math.min(LEVELS - 1, Math.floor((alpha / 0.75) * LEVELS));
+    // A ray through pts, brightest at pts[last]. `dash` makes a moving dashed ray (full mode only).
+    const stroke = (pts: { x: number; y: number }[], alpha: number, width: number, dash?: number) => {
+      const a = pts[0], b = pts[pts.length - 1];
+      if (tier) {
+        const k = level(alpha), half = pts.length >> 1;
+        faint[k].moveTo(a.x, a.y);
+        for (let j = 1; j <= half; j++) faint[k].lineTo(pts[j].x, pts[j].y);
+        bright[k].moveTo(pts[half].x, pts[half].y);
+        for (let j = half + 1; j < pts.length; j++) bright[k].lineTo(pts[j].x, pts[j].y);
+        return;
+      }
+      const g = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+      g.addColorStop(0, rgba(line, 0));
+      g.addColorStop(0.4, rgba(line, alpha * (dark ? 0.32 : 0.5)));
+      g.addColorStop(1, rgba(tip, alpha * 0.82));
+      ctx.strokeStyle = g;
+      ctx.lineWidth = width;
+      if (dash !== undefined) {
+        ctx.setLineDash([1.4, 5.5]);
+        ctx.lineDashOffset = dash;
+      }
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      for (let j = 1; j < pts.length; j++) ctx.lineTo(pts[j].x, pts[j].y);
+      ctx.stroke();
+      if (dash !== undefined) ctx.setLineDash([]);
     };
     const dot = (x: number, y: number, size: number, alpha: number) => {
+      const r = Math.max(0.3, size * 0.55);
+      if (tier) {
+        const d = dots[level(alpha)];
+        d.moveTo(x + r * 1.3, y);
+        d.arc(x, y, r * 1.3, 0, Math.PI * 2);
+        return;
+      }
       ctx.globalAlpha = alpha;
       ctx.drawImage(sprite, x - size * 3, y - size * 3, size * 6, size * 6);
       ctx.globalAlpha = alpha * 0.85;
       ctx.fillStyle = rgba(tip, 1);
       ctx.beginPath();
-      ctx.arc(x, y, Math.max(0.3, size * 0.55), 0, Math.PI * 2);
+      ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalAlpha = 1;
+    };
+    const flush = () => {
+      if (!tier) return;
+      ctx.lineWidth = 1;
+      for (let k = 0; k < LEVELS; k++) {
+        const a = ((k + 0.5) / LEVELS) * 0.75;
+        ctx.strokeStyle = rgba(line, a * (dark ? 0.3 : 0.45));
+        ctx.stroke(faint[k]);
+        ctx.strokeStyle = rgba(tip, a * 0.8);
+        ctx.stroke(bright[k]);
+        ctx.fillStyle = rgba(tip, a * 0.9);
+        ctx.fill(dots[k]);
+      }
     };
 
     // A point t of the way along a ray, turned and tilted in 3D, then put in perspective.
@@ -167,6 +246,7 @@ export function BurstPart() {
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
       ctx.globalCompositeOperation = dark ? "lighter" : "source-over";
+      begin();
       const ox = w * 0.5, oy = h * 1.035, scale = Math.min(w * 0.48, h * 0.79);
       const turn = LIGHT.drift * Math.sin(time * 0.24) + pointer.strength * (pointer.x / w - 0.5) * LIGHT.lean;
       const tilt = LIGHT.drift * 0.4 * Math.sin(time * 0.19) + pointer.strength * (pointer.y / h - 0.5) * LIGHT.lean * 0.33;
@@ -186,25 +266,19 @@ export function BurstPart() {
         const stretch = 1 + 1.15 * pull;
         const tail = { x: moved.x + vx * stretch, y: moved.y + vy * stretch };
         const alpha = p.opacity * (0.84 + 0.16 * Math.sin(time * 0.7 + p.phase));
-        const g = ctx.createLinearGradient(moved.x, moved.y, tail.x, tail.y);
-        g.addColorStop(0, rgba(tip, alpha * 0.85));
-        g.addColorStop(0.4, rgba(line, alpha * (dark ? 0.34 : 0.55)));
-        g.addColorStop(1, rgba(line, 0));
-        ctx.strokeStyle = g;
-        ctx.lineWidth = Math.min(2.4, 0.76 * head.depth * (1 + 0.65 * pull));
-        ctx.beginPath();
-        ctx.moveTo(moved.x, moved.y);
-        ctx.lineTo(tail.x, tail.y);
-        ctx.stroke();
+        const mid = { x: (moved.x + tail.x) / 2, y: (moved.y + tail.y) / 2 };
+        stroke([tail, mid, moved], alpha, Math.min(2.4, 0.76 * head.depth * (1 + 0.65 * pull)));
         dot(moved.x, moved.y, p.size * head.depth * (1 + 0.35 * pull), alpha);
       }
+      flush();
       ctx.globalCompositeOperation = "source-over";
     };
 
-    const still = () => pausedRef.current || reduced;
+    const still = () => pausedRef.current || reduced || tier === 2;
     const tick = (now: number) => {
       frame = 0;
       const dt = Math.min((now - last) / 1000 || 0, 0.05);
+      if (last) gap = gap * 0.8 + Math.min(now - last, 200) * 0.2;
       last = now;
       if (!still()) time += dt;
       const ease = 1 - Math.exp(-dt * 7);
@@ -213,7 +287,24 @@ export function BurstPart() {
       pointer.strength += ((still() ? 0 : pointer.target) - pointer.strength) * ease;
       for (const p of pulses) p.age += dt;
       while (pulses.length && pulses[0].age > 1.4) pulses.shift();
-      draw();
+      if (now - lastDraw >= budget - 2) {
+        lastDraw = now;
+        const t0 = performance.now();
+        draw();
+        // Too slow for 1.5 seconds in a row → step down a tier. "Slow" is our drawing taking most
+        // of the frame, or the browser managing under ~25 frames a second (painting the canvas
+        // happens after our code, so the frame rate catches what the timer can't).
+        cost = cost * 0.8 + (performance.now() - t0) * 0.2;
+        if (cost <= budget * 0.6 && gap < 40) slowSince = 0;
+        else if (!slowSince) slowSince = now;
+        else if (now - slowSince > 1500 && tier < 2) {
+          tier += 1;
+          slowSince = 0;
+          cost = 0;
+          gap = 0;
+          resize();
+        }
+      }
       const busy = !still() || pointer.strength > 0.001 || pulses.length > 0;
       if (!hidden && !offscreen && busy) frame = requestAnimationFrame(tick);
     };
@@ -233,11 +324,12 @@ export function BurstPart() {
       const box = section.getBoundingClientRect();
       w = Math.max(1, box.width);
       h = Math.max(1, box.height);
-      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const dpr = tier ? 1 : Math.min(devicePixelRatio || 1, 2);
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      count = w < 640 ? Math.round(rays.length * 0.55) : rays.length; // fewer rays on phones
+      count = Math.round(rays.length * (tier ? 0.32 : w < 640 ? 0.55 : 1));
+      glowCache = null;
       pointer.target = 0;
       pointer.strength = 0;
       readColors();
