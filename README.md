@@ -57,4 +57,4 @@ would be overwritten. Found a bug or want a block? [Open an issue](https://githu
 ## License
 
 [MIT](./LICENSE). Copyright (c) 2026 99 Bays LLC. Use, change, share and sell the blocks in any
-project; keep the copyright notice in each file.
+project; keep the MIT notice in each file.

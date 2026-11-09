@@ -20,8 +20,25 @@ const copy = {
 
 /**
  * Burst: Depth · Steal My Slop Blocks · https://blocks.stealmyslop.com
- * MIT License. Copyright (c) 2026 99 Bays LLC. Free to use, change and share; keep this
- * notice with the code. Full text: https://blocks.stealmyslop.com/license
+ * MIT License. Copyright (c) 2026 99 Bays LLC. Full text: https://blocks.stealmyslop.com/license
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  * SPDX-License-Identifier: MIT
  *
  * The calmest of the bursts: a 3D fan of light that turns gently towards the pointer and
@@ -419,7 +436,7 @@ export function BurstDepth() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-3/5 bg-gradient-to-b from-background via-background/80 to-transparent" />
       <div className="mx-auto flex min-h-[600px] max-w-3xl flex-col items-center px-6 pb-60 pt-20 text-center sm:min-h-[680px] sm:pt-28">
         <p className="text-sm font-medium text-muted-foreground">{copy.label}</p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-6xl">{copy.headline}</h1>
+        <h2 className="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-6xl">{copy.headline}</h2>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">{copy.body}</p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <a
