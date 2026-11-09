@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "stealmyslop",
+  "homepage": "https://blocks.stealmyslop.com",
+  "items": [
+    {
+      "name": "hero-plain",
+      "type": "registry:block",
+      "meta": { "license": "MIT" },
+      "title": "Hero: Plain",
+      "description": "Left-aligned hero with a label, a specific headline, two buttons and three short proof points. Written copy, no lorem ipsum.",
+      "categories": ["hero"],
+      "files": [{ "path": "registry/blocks/hero-plain.tsx", "type": "registry:component" }]
+    },
+    {
+      "name": "hero-split",
+      "type": "registry:block",
+      "meta": { "license": "MIT" },
+      "title": "Hero: Split",
+      "description": "Headline and one button on the left, a small product picture on the right drawn with plain elements, so it looks finished before you have a screenshot.",
+      "categories": ["hero"],
+      "files": [{ "path": "registry/blocks/hero-split.tsx", "type": "registry:component" }]
+    },
+    {
+      "name": "hero-signup",
+      "type": "registry:block",
+      "meta": { "license": "MIT" },
+      "title": "Hero: Signup",
+      "description": "Centred headline with one highlighted phrase and an accessible email form, ready to connect to your email tool.",
+      "categories": ["hero"],
+      "files": [{ "path": "registry/blocks/hero-signup.tsx", "type": "registry:component" }]
+    }
+  ]
+}
