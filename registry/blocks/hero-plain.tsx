@@ -46,13 +46,13 @@ export function HeroPlain() {
         <div className="mt-10 flex flex-wrap gap-3">
           <a
             href={copy.primary.href}
-            className="inline-flex h-11 items-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            className="inline-flex h-11 items-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
             {copy.primary.text}
           </a>
           <a
             href={copy.secondary.href}
-            className="inline-flex h-11 items-center rounded-md border border-border px-6 text-sm font-medium hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            className="inline-flex h-11 items-center rounded-md border border-border px-6 text-sm font-medium hover:bg-muted focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
             {copy.secondary.text}
           </a>

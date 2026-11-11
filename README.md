@@ -18,7 +18,7 @@ instead of lorem ipsum. One file each, no dependencies, and they use your theme'
 
 ## Install
 
-You need a React + Tailwind project set up with shadcn/ui (`npx shadcn@latest init`). Then pick one:
+You need a React + Tailwind CSS 4 project set up with shadcn/ui (`npx shadcn@latest init`, which installs Tailwind 4). The blocks use Tailwind 4 class names. Then pick one:
 
 ```bash
 # From the website

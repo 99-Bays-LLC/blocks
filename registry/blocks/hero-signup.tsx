@@ -51,7 +51,7 @@ export function HeroSignup() {
       <div className="mx-auto max-w-3xl px-6 py-20 text-center sm:py-28">
         <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">
           {copy.before}
-          <span className="rounded bg-primary px-2 text-primary-foreground [box-decoration-break:clone] [-webkit-box-decoration-break:clone]">
+          <span className="rounded-sm bg-primary px-2 text-primary-foreground [box-decoration-break:clone] [-webkit-box-decoration-break:clone]">
             {copy.highlight}
           </span>
           {copy.after}
@@ -84,12 +84,12 @@ export function HeroSignup() {
                 required
                 autoComplete="email"
                 placeholder={copy.placeholder}
-                className="h-11 w-full min-w-0 rounded-md border border-border bg-background px-4 text-base outline-none placeholder:text-muted-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+                className="h-11 w-full min-w-0 rounded-md border border-border bg-background px-4 text-base outline-hidden placeholder:text-muted-foreground focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
               />
             </div>
             <button
               type="submit"
-              className="h-11 shrink-0 whitespace-nowrap rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+              className="h-11 shrink-0 whitespace-nowrap rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
             >
               {copy.button}
             </button>

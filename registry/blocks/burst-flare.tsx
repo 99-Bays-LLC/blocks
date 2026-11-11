@@ -433,7 +433,7 @@ export function BurstFlare() {
     <section ref={sectionRef} className="relative isolate overflow-hidden bg-background text-foreground [touch-action:pan-y]">
       <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full text-primary" />
       {/* Keeps the words readable where the light reaches the top. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-3/5 bg-gradient-to-b from-background via-background/80 to-transparent" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-3/5 bg-linear-to-b from-background via-background/80 to-transparent" />
       <div className="mx-auto flex min-h-[600px] max-w-3xl flex-col items-center px-6 pb-60 pt-20 text-center sm:min-h-[680px] sm:pt-28">
         <p className="text-sm font-medium text-muted-foreground">{copy.label}</p>
         <h2 className="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-6xl">{copy.headline}</h2>
@@ -441,13 +441,13 @@ export function BurstFlare() {
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <a
             href={copy.primary.href}
-            className="inline-flex h-11 items-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            className="inline-flex h-11 items-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
             {copy.primary.text}
           </a>
           <a
             href={copy.secondary.href}
-            className="inline-flex h-11 items-center rounded-md border border-border bg-background/60 px-6 text-sm font-medium backdrop-blur hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            className="inline-flex h-11 items-center rounded-md border border-border bg-background/60 px-6 text-sm font-medium backdrop-blur-sm hover:bg-muted focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
             {copy.secondary.text}
           </a>
@@ -457,7 +457,7 @@ export function BurstFlare() {
         type="button"
         onClick={toggle}
         aria-pressed={paused}
-        className="absolute bottom-4 right-4 rounded-full border border-border bg-background/70 px-3.5 py-1.5 text-xs font-medium backdrop-blur hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+        className="absolute bottom-4 right-4 rounded-full border border-border bg-background/70 px-3.5 py-1.5 text-xs font-medium backdrop-blur-sm hover:bg-muted focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
       >
         {paused ? copy.play : copy.pause}
       </button>

@@ -47,7 +47,7 @@ export function HeroSplit() {
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground">{copy.body}</p>
           <a
             href={copy.primary.href}
-            className="mt-8 inline-flex h-11 items-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            className="mt-8 inline-flex h-11 items-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
             {copy.primary.text}
           </a>
@@ -70,8 +70,8 @@ export function HeroSplit() {
                     <span
                       className={
                         i.status === "Paid"
-                          ? "rounded bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground"
-                          : "rounded border border-border px-2 py-0.5 text-xs text-muted-foreground"
+                          ? "rounded-sm bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground"
+                          : "rounded-sm border border-border px-2 py-0.5 text-xs text-muted-foreground"
                       }
                     >
                       {i.status}
